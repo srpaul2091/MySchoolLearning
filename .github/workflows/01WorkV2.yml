@@ -43,6 +43,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        
+      - name: Debug image name
+        run: echo "${{ secrets.DOCKERHUB_USERNAME }}/my-school-pupil:1.0.0"
 
       - name: Build docker image 
         run: |
