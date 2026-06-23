@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Student Information:v2.0.0</title>
+<style>
+fieldset {
+  background-color: #eeeeee;
+}
+
+legend {
+  background-color: rgb(177, 195, 245);
+  color: rgb(2, 2, 2);
+  padding: 5px 10px;
+}
+
+input {
+  margin: 5px;
+}
+.btn {
+   
+  padding: 8px 12px;
+	background-color: hwb(194 2% 68%); 
+	color: #FFFFFF;
+	font-style: oblique;
+	font-weight: bold;
+	border-radius: 10px; 
+}
+
+.field_set_d{
+  border-color: rgb(12, 12, 12);
+  border-style: solid;
+  width: 500px;
+  background-color:#93b3c0;
+}
+
+.field_set{
+  border-color: #F00;
+  border-style: solid;
+  width: 500px;
+  background-color:#8ddff8;
+}
+
+</style>
+</head>
+<body>
+  <form method="POST" action="/pupil_add_student">
+    <fieldset class="field_set">
+    <legend>Student Details:M.0.0</legend>
+     <p>
+         First Name: <input type = "text" name = "fname" required />
+  	</p>
+  	 <p>
+         Last Name: <input type = "text" name = "lname"  required />
+  	</p> 
+  	 <p>
+         <input type = "radio" name = "Gender" value = "Male"> Male
+         <input type = "radio" name = "Gender" value = "Female"> Female
+	</p> 
+	<p>
+	Student ID: <input type = "text" name = "ID" required />
+	</p> 
+	<p>
+	<label for="Subject">Subject:</label> 
+		<select name="Subject" type="text" size="1" required >
+			<option>Medicine</option>
+			<option>Mathmetics</option>
+			<option>Physics</option>
+			<option>Chemistry</option>
+			<option>Maths</option>   
+			<option>Biology</option>     
+			<option>English</option>  
+			<option>Health</option>
+			<option>History</option>   
+			<option>Neurology </option>  
+			<option>Sports</option>  
+			<option>Musics</option>
+			<option>Literature</option>
+		</select>
+	</p> 
+	<p>
+	Phone Number: <input type = "text" name = "phone" required />
+	</p> 
+	<p>
+	Admission Date: <input type = "date" name = "AdminDate"  required />
+	</p>
+ 	<p>
+	<button type="submit" class="btn">Add Student</button> 
+    </p>	
+	<img src="static/MyGarden.jpeg" alt="Trulli" width="180" height="320" style="position: absolute; top: 50px; left: 350px;">
+	   <fieldset class="field_set_d">
+         <legend>Build Info</legend>
+        <p>
+        <font style="color:blue"  size="4" > ✅Database:MongoDB Atlas, Image:kanu17/my-school-pupil:1.0.0 </font><br>
+        <font style="color:blue"  size="4" > ✅Test  Link: https://myschool01.mremasrejoy.com/pupil </font><br>
+        <font style="color:blue"  size="4" > ✅Latest Update: Fri Jun 19 12:07:27 PM ACST 2026</font><br>
+        <font style="color:blue"  size="4" > ✅Build Info: Built Docker Image using GitHub Actions</font><br>
+        </p>
+        </fieldset>	
+</fieldset>
+</form>
+<br> 
+	<h3>Students Information:</h3> 
+	<ul> 
+		{% for student in students %} 
+			<li>{{ student.fname }} [Student ID: {{ student.ID }}, Phone: {{ student.phone }}]<a href="/pupil_delete_student/{{student._id }}">Delete</a></li> 
+		{% endfor %}  
+	</ul> 
+
+	
+
+</body>
+</html>

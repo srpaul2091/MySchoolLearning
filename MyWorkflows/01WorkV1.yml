@@ -1,0 +1,77 @@
+name: Python My School Test 
+
+on: [push, workflow_dispatch]  
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          fi
+      
+      - name: Start Flask app in background
+        run: |
+          python app.py &
+          sleep 5
+
+      - name: Test app with curl
+        run: |
+          curl --fail http://127.0.0.1:8002/pupil
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build docker image 
+        run: |
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/my-school-pupil:1.0.0 .
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push  Docker Image
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/my-school-pupil:1.0.0
+
+  deploy: 
+    needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ap-southeast-2
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - run: |
+          aws eks update-kubeconfig \
+            --name my-school-cluster \
+            --region ap-southeast-2
+
+      - run: |
+          kubectl rollout restart deployment/myschool-deployment-v3
+
+      
+  
