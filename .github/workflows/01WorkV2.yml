@@ -9,8 +9,8 @@ env:
 jobs:
   test:
     env: 
-      MONGODB_USERNAME: kanupaul
-      MONGODB_PASSWORD: QM3dbyJiqroKax7i
+      MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}
+      MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
       MONGODB_HOST: cluster0.mp3lyec.mongodb.net
       MONGODB_APP_NAME: Cluster0
 
@@ -50,6 +50,10 @@ jobs:
         with:           
           name: python-test-artifacts
           path: artifacts/
+
+      - name: Output Hostname
+        run: |
+          echo  "${{ env.MONGODB_HOST }}"
 
            
   build:
