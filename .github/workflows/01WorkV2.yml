@@ -3,9 +3,17 @@ on:
   push: 
     branches: 
       - main   
-    
+env:
+  MONGODB_DB_NAME: mytododb
+
 jobs:
   test:
+    env: 
+      MONGODB_USERNAME: kanupaul
+      MONGODB_PASSWORD: QM3dbyJiqroKax7i
+      MONGODB_HOST: cluster0.mp3lyec.mongodb.net
+      MONGODB_APP_NAME: Cluster0
+
     runs-on: ubuntu-latest
 
     steps:
