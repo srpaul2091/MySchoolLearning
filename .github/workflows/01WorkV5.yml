@@ -121,7 +121,7 @@ jobs:
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/my-school-pupil:2.0.0
     
   report:
-    needs: [lint,test,build]
+    needs: [lint,build]
     if: failure()
     runs-on: ubuntu-latest
 
