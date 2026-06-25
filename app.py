@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for   #, jsonify
+from flask import Flask, request, render_template, redirect, url_for   
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from bson.objectid import ObjectId
@@ -70,4 +70,3 @@ def delete_student(student_id):
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True, port=8002)
-
