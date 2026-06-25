@@ -5,7 +5,7 @@ from bson.objectid import ObjectId
 import os
 from urllib.parse import quote_plus
 
-app = Flask(__name__) 
+app = Flask(__name__)
 
 
 dbUser = os.getenv("MONGODB_USERNAME")
@@ -39,10 +39,12 @@ except Exception as e:
 db = client.mytododb
 students_collection = db.students
 
+
 @app.route('/pupil')
 def home():
     students = students_collection.find()
     return render_template('index.html', students=students)
+
 
 @app.route('/pupil_add_student', methods=['POST'])
 def add_student():
@@ -59,10 +61,12 @@ def add_student():
         students_collection.insert_one(student_data)
     return redirect(url_for('home'))
 
+
 @app.route('/pupil_delete_student/<student_id>', methods=['GET'])
 def delete_student(student_id):
     students_collection.delete_one({'_id': ObjectId(student_id)})
     return redirect(url_for('home'))
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True, port=8002)
