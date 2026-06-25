@@ -8,7 +8,34 @@ env:
   MONGODB_DB_NAME: mytododb  # Can be used in all jobs (Global)
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install lint dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8
+
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          fi
+
+      - name: Run flake8 lint
+        run: |
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          flake8 . --count --max-complexity=10 --max-line-length=127 --statistics
+
   test:
+    needs: lint
     environment: testing  # This job runs under ENV testing 
     env: 
       MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}  # Only viewed from test job , defined in 'testing' environment as secret
