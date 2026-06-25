@@ -36,7 +36,7 @@ jobs:
           flake8 . --count --max-complexity=10 --max-line-length=127 --statistics
             
       - name: Upload lint results
-        if: steps.run-lint.outcome == 'failure'
+        if: failure() && steps.run-lint.outcome == 'failure'
         uses: actions/upload-artifact@v4
         with:
           name: lint-results
@@ -119,5 +119,17 @@ jobs:
       - name: Push  Docker Image
         run: |
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/my-school-pupil:2.0.0
+    
+  report:
+    needs: build
+    if: failure()
+    runs-on: ubuntu-latest
+
+    steps: 
+      - name: Output Information 
+        run: |
+          echo "My Build Status"
+          echo "${{ github }}"
+
 
   
