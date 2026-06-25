@@ -121,14 +121,14 @@ jobs:
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/my-school-pupil:2.0.0
     
   report:
-    needs: [lint,build]
+    needs: [lint]
     if: failure()
     runs-on: ubuntu-latest
 
     steps: 
       - name: Output Information 
         run: |
-          echo "My Build Status"
+          echo "My Lint  Status"
           echo "${{ github }}"
 
 
