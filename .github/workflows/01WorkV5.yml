@@ -123,6 +123,7 @@ jobs:
   deploy:
     needs: build
     uses: ./.github/workflows/02ReusableDeploy.yaml
+    secrets: inherit
     
   report:
     needs: [lint]
