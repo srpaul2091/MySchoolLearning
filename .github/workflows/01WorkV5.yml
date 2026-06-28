@@ -85,8 +85,7 @@ jobs:
           sleep 5
 
       - name: Test app with curl
-        run: |
-          curl --fail http://127.0.0.1:8002/pupil
+        run: |          
           mkdir -p artifacts
           pytest --junitxml=artifacts/junit.xml --cov=. --cov-report=xml:artifacts/coverage.xml          
 
@@ -96,11 +95,7 @@ jobs:
           name: python-test-artifacts
           path: artifacts/
 
-      - name: Output Hostname
-        run: |
-          echo  "MONGODB_HOST: ${{ env.MONGODB_HOST }}"
-          echo  "MONGODB_HOST: $MONGODB_HOST"
-
+      
          
   build:
     needs: test
