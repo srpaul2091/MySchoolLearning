@@ -49,19 +49,21 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    container: 
-      image: python:3.12
+    #container: 
+     # image: python:3.12
 
     
     env: 
       MONGODB_USERNAME: root # Need for service container below 
       MONGODB_PASSWORD: example # Need for service container below 
-      MONGODB_CLUSTER_ADDRESS: mongodb # Need for service container below 
+      MONGODB_CLUSTER_ADDRESS: 127.0.0.1:27017 #mongodb # Need for service container below 
       MONGODB_CONNECTION_PROTOCOL: mongodb   # Need for service container below 
     
     services: 
        mongodb: 
         image: mongo 
+        ports:
+          - 27017:27017
         env:
           MONGO_INITDB_ROOT_USERNAME: root
           MONGO_INITDB_ROOT_PASSWORD: example
@@ -93,9 +95,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:           
           name: python-test-artifacts
-          path: artifacts/
-
-      
+          path: artifacts/      
          
   build:
     needs: test
@@ -120,8 +120,7 @@ jobs:
 
       - name: Push  Docker Image
         run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/my-school-pupil:2.0.0
-  
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/my-school-pupil:2.0.0  
   
   report:
     needs: [lint]
