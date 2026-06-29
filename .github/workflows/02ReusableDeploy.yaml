@@ -1,0 +1,64 @@
+name: Reusable Deploy
+
+on:
+  workflow_call:
+    inputs:
+      aws-region:
+        description: "AWS region where EKS cluster is running"
+        type: string
+        required: false
+        default: "ap-southeast-2"
+
+      eks-cluster-name:
+        description: "EKS cluster name"
+        type: string
+        required: true
+        default: "my-school-cluster"
+
+      deployment-name:
+        description: "Kubernetes deployment name to restart"
+        type: string
+        required: true
+        default: "myschool-deployment-v3"
+
+      namespace:
+        description: "Kubernetes namespace"
+        type: string
+        required: false
+        default: "default"
+
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ inputs.aws-region }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Update kubeconfig
+        run: |
+          aws eks update-kubeconfig \
+            --name "${{ inputs.eks-cluster-name }}" \
+            --region "${{ inputs.aws-region }}"
+
+      - name: Restart deployment
+        run: |
+          kubectl rollout restart deployment/${{ inputs.deployment-name }} \
+            -n "${{ inputs.namespace }}"
+
+      - name: Check rollout status
+        run: |
+          kubectl rollout status deployment/${{ inputs.deployment-name }} \
+            -n "${{ inputs.namespace }}"
