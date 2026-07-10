@@ -16,6 +16,7 @@ jobs:
             echo "a multi-line"
             echo "script."
   echo-goodbye: 
+    needs: echo-hello
     runs-on: ubuntu-latest
 
     steps: 
