@@ -3,7 +3,12 @@ name: 02-workflow-events
 
 on: 
   push:
+<<<<<<< HEAD
   pull_request:  
+=======
+  pull_request: 
+
+>>>>>>> 3d43de715c9e5bc0f967a670f62a09dfa04f384c
   workflow_dispatch: 
 
 jobs: 
