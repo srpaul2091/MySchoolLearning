@@ -14,7 +14,7 @@ jobs:
               run: pwd   
             - name: List files from working directory
               run: ls -l
-              working-directory: MySchoolLearning/MyWorkflows      
+              working-directory: MyWorkflows      
             
 
 
